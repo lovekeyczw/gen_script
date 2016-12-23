@@ -1,0 +1,133 @@
+<marlin>
+   
+   <execute>
+     <processor name="MyStdHepReader"/>
+	  <processor name="MyFilterProcessor"/>
+	  <!--
+	  -->
+   </execute>
+
+     <global>
+     <parameter name="LCIOInputFiles">
+     </parameter>
+     <!--parameter name="GearXMLFile" value="GearOutput.xml"/-->
+     <parameter name="MaxRecordNumber" value="100000001"/>
+     <parameter name="SkipNEvents" value="0"/>
+     <parameter name="SupressCheck" value="false"/>
+     <parameter name="Verbosity" options="DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT"> MESSAGE </parameter>
+     <parameter name="RandomSeed" value="1234567890" />
+     </global>
+
+
+     <processor name="MyStdHepReader" type="LGStdHepReader">
+      <!--Reads StdHep files as input and creates LCIO events with MCParticle collections. 
+          Make sure to not specify any LCIOInputFiles in the steering in order to read StdHep files.-->
+      <!-- include here the stdhep file path -->
+	  <parameter name="LGStdHepFileName" type="string">
+		  InputStdHep_1
+		  InputStdHep_2
+		  InputStdHep_3
+		  InputStdHep_4
+		  InputStdHep_5
+		  InputStdHep_6
+		  InputStdHep_7
+		  InputStdHep_8
+		  InputStdHep_9
+		  InputStdHep_0
+     	</parameter>
+      <parameter name="Verbosity" type="string"> DEBUG </parameter>
+     </processor>
+
+	 <processor name="MyFilterProcessor" type="FilterProcessor">
+		 <!-- Print Reconstructed Particle-->
+		 <!--Input collection of MCParticle-->
+		 <parameter name="InputMCCollection" type="string" lcioInType="MCParticle">MCParticle </parameter>
+		 <!--Lepton ID-->
+		 <parameter name="LeptonID" type="int">13 </parameter>
+		 <!--output file for lcio collections-->
+		 <parameter name="OutputMCCollection" type="string" lcioOutType="MCParticle">output_1 </parameter>
+		 <!-- output file for lcio collections -->
+		 <parameter name="OutputRejectCollection" type="string" lcioOutType="MCParticle">reject_1 </parameter>
+		 <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+		 <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+
+	  <processor name="MyPFAFastSimu" type="PFAFastSimu">
+      <!--Print MC Truth-->
+      <!--Enable PFA double counting-->
+      <parameter name="EnableChargeSplitting" type="int">1 </parameter>
+      <!--Enable Geometry/Energy Dependent Efficiency.-->
+      <parameter name="EnableEfficiency" type="int">1 </parameter>
+      <!--Enable absobtion of Neutral Cluster to Charged.-->
+      <parameter name="EnableNeutralMerge" type="int">1 </parameter>
+      <!--Enable Smearing to Final State Particle Momenta.-->
+      <parameter name="EnableSmearing" type="int">1 </parameter>
+      <!--Enable scan the polar angle-->
+      <parameter name="EnableThetaScan" type="int">1 </parameter>
+      <!--quark flavor to be selected-->
+      <parameter name="Flavor" type="int">0 </parameter>
+      <!--Name of the MCParticle input collection-->
+      <parameter name="InputCollectionName" type="string" lcioInType="MCParticle">MCParticle </parameter>
+      <!--Name of the MCTruthMapping output collection-->
+      <parameter name="MCTruthMappingCollectionName" type="string" lcioOutType="LCRelation">RecoMCTruthLink  </parameter>
+      <!--If zero an already existing file will not be overwritten.-->
+      <parameter name="OverwriteFile" type="int">1 </parameter>
+      <!--Name of the ReconstructedParticles output collection-->
+      <parameter name="RecoParticleCollectionName" type="string" lcioOutType="ReconstructedParticle"> ArborPFOs </parameter>
+      <!--The name of the ROOT tree-->
+      <parameter name="TreeName" type="string">MCPart </parameter>
+      <!--The name of the file to which the ROOT tree will be written-->
+      <parameter name="TreeOutputFile" type="string">MCTruth.root </parameter>
+      <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+      <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+     </processor>
+
+ <processor name="MyIsoLep" type="IsoLep">
+ <!--Print MC Truth-->
+  <!--A reasonable cone angle of isolated Electron between 10GeV and 15GeV-->
+  <parameter name="ConeAngle_of_Electron_from_10_15" type="double">0.3 </parameter>
+  <!--A reasonable cone angle of isolated Electron bigger than 15GeV-->
+  <parameter name="ConeAngle_of_Electron_from_15" type="double">0.25 </parameter>
+  <!--A reasonable cone angle of isolated Electron between 5GeV and 10GeV-->
+  <parameter name="ConeAngle_of_Electron_from_5_10" type="double">0.3 </parameter>
+  <!--A reasonable cone angle of isolated Muon between 10GeV and 15GeV-->
+  <parameter name="ConeAngle_of_Muon_from_10_15" type="double">0.15 </parameter>
+  <!--A reasonable cone angle of isolated Muon bigger than 15GeV-->
+  <parameter name="ConeAngle_of_Muon_from_15" type="double">0.15 </parameter>
+  <!--A reasonable cone angle of isolated Muon between 5GeV and 10GeV-->
+  <parameter name="ConeAngle_of_Muon_from_5_10" type="double">0.15 </parameter>
+  <!--Cone Energy or Electron's Energy between 10GeV and 15GeV-->
+  <parameter name="ConeEnergyorElectronEnergy_10_15" type="double">0.75 </parameter>
+  <!--Cone Energy or Electron's Energy bigger than 15GeV 0.6-->
+  <parameter name="ConeEnergyorElectronEnergy_15" type="double">0.6 </parameter>
+  <!--Cone Energy or Electron's Energy between 5GeV and 10GeV 0.9-->
+  <parameter name="ConeEnergyorElectronEnergy_5_10" type="double">0.9 </parameter>
+  <!--Cone Energy or Muon's Energy between 10GeV and 15GeV 0.25-->
+  <parameter name="ConeEnergyorMuonEnergy_10_15" type="double">0.25 </parameter>
+  <!--Cone Energy or Muon's Energy bigger than 15GeV 0.25-->
+  <parameter name="ConeEnergyorMuonEnergy_15" type="double">0.25 </parameter>
+  <!--Cone Energy or Muon's Energy between 5GeV and 10GeV 0.7-->
+  <parameter name="ConeEnergyorMuonEnergy_5_10" type="double">0.7 </parameter>
+  <!--Input collection of ReconstructedParticles-->
+  <parameter name="InputPFOsCollection" type="string" lcioInType="ReconstructedParticle">ArborPFOs </parameter>
+  <!--Output collection of isolated leptons-->
+  <parameter name="OutputCollectionIsolatedLeptons" type="string" lcioOutType="ReconstructedParticle">Isolep </parameter>
+  <!--Copy of input collection but without the isolated leptons-->
+  <parameter name="OutputCollectionWithoutIsolatedLepton" type="string" lcioOutType="ReconstructedParticle">ArborPFOsWithoutIsoLep </parameter>
+  <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+  <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+</processor>
+     
+	 <processor name="MyFilterFornnHProcessor" type="FilterFornnHProcessor">
+		 <!-- Print Reconstructed Particle-->
+		 <!--Input collection of MCParticle-->
+		 <parameter name="InputMCCollection" type="string" lcioInType="MCParticle">MCParticle </parameter>
+		 <!--output file for lcio collections-->
+		 <parameter name="OutputMCCollection" type="string" lcioOutType="MCParticle">output_1 </parameter>
+		 <!-- output file for lcio collections -->
+		 <parameter name="OutputRejectCollection" type="string" lcioOutType="MCParticle">reject_1 </parameter>
+		 <!--verbosity level of this processor ("DEBUG0-4,MESSAGE0-4,WARNING0-4,ERROR0-4,SILENT")-->
+		 <!--parameter name="Verbosity" type="string">DEBUG </parameter-->
+ </processor>
+	  
+</marlin>
